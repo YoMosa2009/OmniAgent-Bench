@@ -118,7 +118,10 @@ def generate_svg_chart(summary_results: List[Dict[str, Any]], out_path: str):
     bar_h = 16
     bar_gap = 4
 
+    import html
+
     svg_lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {svg_w} {svg_h}" width="{svg_w}" height="{svg_h}" style="background-color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, sans-serif;">',
         '<!-- Title & Subtitle -->',
         f'<text x="{svg_w // 2}" y="35" text-anchor="middle" fill="#f8fafc" font-size="20" font-weight="700">OmniAgent-Bench: Head-to-Head Performance Evaluation</text>',
@@ -136,8 +139,9 @@ def generate_svg_chart(summary_results: List[Dict[str, Any]], out_path: str):
         is_highlight = i < 2
         font_weight = "700" if is_highlight else "500"
         label_color = "#f8fafc" if is_highlight else "#cbd5e1"
+        escaped_label = html.escape(cat_display)
 
-        svg_lines.append(f'<text x="{margin_l - 15}" y="{y_group + group_h/2 + 3}" text-anchor="end" fill="{label_color}" font-size="12" font-weight="{font_weight}">{cat_display}</text>')
+        svg_lines.append(f'<text x="{margin_l - 15}" y="{y_group + group_h/2 + 3}" text-anchor="end" fill="{label_color}" font-size="12" font-weight="{font_weight}">{escaped_label}</text>')
 
         for m_idx, m_val in enumerate(data[cat_display]):
             bw = (m_val / 100) * plot_w
@@ -150,8 +154,9 @@ def generate_svg_chart(summary_results: List[Dict[str, Any]], out_path: str):
     legend_y = svg_h - 22
     for idx, (m_name, col) in enumerate(zip(models, colors)):
         lx = margin_l + idx * 240
+        escaped_model_name = html.escape(m_name)
         svg_lines.append(f'<rect x="{lx}" y="{legend_y - 10}" width="14" height="14" rx="2" fill="{col}" />')
-        svg_lines.append(f'<text x="{lx + 20}" y="{legend_y + 1}" fill="#e2e8f0" font-size="11" font-weight="500">{m_name}</text>')
+        svg_lines.append(f'<text x="{lx + 20}" y="{legend_y + 1}" fill="#e2e8f0" font-size="11" font-weight="500">{escaped_model_name}</text>')
 
     svg_lines.append('</svg>')
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
