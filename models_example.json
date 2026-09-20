@@ -1,0 +1,17 @@
+[
+  {
+    "model_name": "fable-coder-v4",
+    "backend": "ollama",
+    "temperature": 0.0
+  },
+  {
+    "model_name": "qwen2.5-coder:7b",
+    "backend": "ollama",
+    "temperature": 0.0
+  },
+  {
+    "model_name": "deepseek-coder-v2:16b",
+    "backend": "ollama",
+    "temperature": 0.0
+  }
+]
