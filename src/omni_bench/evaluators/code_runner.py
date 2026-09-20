@@ -1,3 +1,4 @@
+import os
 import re
 import sys
 import tempfile
@@ -44,13 +45,16 @@ if __name__ == '__main__':
     print('ALL_TESTS_PASSED')
 """
 
-        with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False, encoding="utf-8") as tf:
+        sandbox_dir = r"D:\fable_benchmark_sandbox\workspace"
+        os.makedirs(sandbox_dir, exist_ok=True)
+        with tempfile.NamedTemporaryFile("w", suffix=".py", delete=False, encoding="utf-8", dir=sandbox_dir) as tf:
             tf.write(full_script)
             tf_path = tf.name
 
         try:
             res = subprocess.run(
                 [sys.executable, tf_path],
+                cwd=sandbox_dir,
                 capture_output=True,
                 text=True,
                 timeout=self.timeout_seconds
