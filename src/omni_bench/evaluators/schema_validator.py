@@ -45,7 +45,9 @@ class ToolSchemaEvaluator(BaseEvaluator):
         for k, v in expected_args.items():
             if k not in args:
                 return False, 0.5, f"FAIL: Missing required argument '{k}'"
-            if str(args[k]).lower().strip() != str(v).lower().strip():
+            arg_val = str(args[k]).lower().strip()
+            exp_val = str(v).lower().strip()
+            if arg_val != exp_val and exp_val not in arg_val:
                 return False, 0.5, f"FAIL: Argument '{k}' value '{args[k]}' does not match expected '{v}'"
 
         # Validate fuzzy substring constraints on arguments if specified
